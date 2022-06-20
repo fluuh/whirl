@@ -97,13 +97,40 @@ static int parse_args(char **argv)
 	return -2;
 }
 
+/* run cmd */
+static char *read_file(const char *dir, const char *name)
+{
+	if(strlen(dir) + strlen(name) > 256) {
+		return NULL;
+	}
+	char path[256];
+	sprintf(path, "%s/%s", dir, name);
+	FILE *f = fopen(path, "r");
+	if(f == NULL) {
+		return NULL;
+	}
+	fseek(f, 0, SEEK_END);
+	long fsize = ftell(f);
+	rewind(f);
+	char *str = malloc(fsize + 1);
+	fread(str, fsize, 1, f);
+	str[fsize] = 0;
+	return str;
+}
+
+static int cmd_build(void)
+{
+	printf("%s\n", read_file(args.pdir, "Whirl.toml"));
+	return 0;
+}
+
 static int run_cmd(void)
 {
 	switch(args.cmd) {
 	case(CMD_INIT):
 		break;
 	case(CMD_BUILD):
-		break;
+		return cmd_build();
 	case(CMD_HELP):
 		print_usage(args.name);
 		break;
