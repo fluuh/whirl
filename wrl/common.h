@@ -7,6 +7,7 @@
 
 typedef enum {
 	wrl_void,
+	wrl_any,
 	wrl_nil,
 	wrl_list,
 	wrl_func,
