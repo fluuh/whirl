@@ -5,6 +5,7 @@
 
 typedef enum {
 	wrl_void,
+	wrl_nil,
 	wrl_list,
 	wrl_func,
 	wrl_table, /* TODO */
