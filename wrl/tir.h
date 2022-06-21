@@ -61,16 +61,31 @@ struct tir_func_s {
 };
 
 typedef struct tir_sym_s {
+	enum {
+		resolve_use,
+		resolve_raw,
+	} resolve;
+	enum {
+		sym_func,
+	} ty;
 	const char *name;
+	union {
+		struct {
+			int n_args;
+		} fn;
+	};
 } tir_sym;
 
-typedef struct tir_unit_decl_s {
-	int num_sym;
+/* a module declaration */
+typedef struct tir_decl_s {
+	int cap;
+	int len;
 	tir_sym **sym;
-} tir_unit_decl;
+} tir_decl;
 
-typedef struct tir_unit_s {
-	tir_unit_decl *decl;
-} tir_unit;
+typedef struct tir_module_s {
+	tir_decl decl;
+	tir_func *top;
+} tir_module;
 
 #endif
