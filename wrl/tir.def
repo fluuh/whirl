@@ -1,0 +1,20 @@
+/* EXPR(ENUM, NAME, TYPE) 
+ * - ENUM
+ *   This is the internal name of an expression.
+ *   The actual symbol in the C sources is TCODE_##enum (see tir.h)
+ * - NAME
+ *   The 'external' names to be used by an eventual tx_dump function.
+ *   This should be ENUM in lower case.
+ * - TYPE
+ *   The types of operands. Stored as a string in the tx_name array.
+ *   The types are stored in tx_name[], defined in tir.c.
+ *   See the definition of tx_name[] for more information.
+ */
+
+EXPR(NOP, "nop", "")
+/* get the value in a register */
+EXPR(REG, "reg", "r")
+/* set a register */
+EXPR(SREG, "sreg", "rv")
+
+EXPR(CALL_NAME, "call_name", "s")
