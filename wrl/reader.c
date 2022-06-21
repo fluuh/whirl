@@ -63,9 +63,21 @@ static int is_sym(char c) {
 	   c == '/' || c == '%';
 }
 
+static wrl_value_t read_expr(reader_t *p);
+
 static wrl_value_t read_list(reader_t *p)
 {
-	
+	nextc(p);
+	wrl_list_t list = wrl_list_empty();
+	while(p->c != ')') {
+		if(p->c == 0) {
+			wrl_list_free(list);
+			return wrl_val_nop();
+		}
+		wrl_list_append(list, read_expr(p));
+	}
+	nextc(p);
+	return wrl_val_list(list);
 }
 
 
@@ -76,7 +88,36 @@ static wrl_value_t read_num(reader_t *p)
 
 static wrl_value_t read_sym(reader_t *p)
 {
-	
+	int start = p->i - 1;
+	int len = 0;
+	while(is_sym(p->c)) {
+		len++;
+		nextc(p);
+	}
+	char *str = malloc(len + 1);
+	memcpy(str, &p->src[start], len);
+	str[len] = 0;
+	return wrl_val_sym(str);
+}
+
+static wrl_value_t read_str(reader_t *p)
+{
+	nextc(p);
+	int start = p->i - 1;
+	int len = 0;
+	while(p->c != '"') {
+		if(p->c == 0) {
+			report_error(p, "unexpected eof");
+			return wrl_val_nop();
+		}
+		len++;
+		nextc(p);
+	}
+	nextc(p);
+	char *str = malloc(len + 1);
+	memcpy(str, &p->src[start], len);
+	str[len] = 0;
+	return wrl_val_str(str);
 }
 
 static wrl_value_t read_expr(reader_t *p)
@@ -96,6 +137,14 @@ static wrl_value_t read_expr(reader_t *p)
 		/* identifier */
 		return read_sym(p);
 	}
+	if(p->c == '"') {
+		/* string */
+		return read_str(p);
+	}
+	/* \0 */
+	if(p->c == '\0') {
+		return wrl_val_nop();
+	}
 	/* error */
 	report_error(p, "unexpected character");
 	return wrl_val_nop();
@@ -103,12 +152,16 @@ static wrl_value_t read_expr(reader_t *p)
 
 static wrl_value_t read_top(reader_t *p)
 {
+	nextc(p);
 	wrl_list_t list = wrl_list_empty();
 	while(p->c != 0) {
 		wrl_value_t val = read_expr(p);
 		if(val == NULL) {
 			/* fatal error */
 			return NULL;
+		} else if(val->ty == val_nop) {
+			nextc(p);
+			continue;	
 		}
 		wrl_list_append(list, val);
 	}
@@ -126,8 +179,6 @@ reader_error_t wrl_read(const char *src, wrl_value_t *dst)
 	p->first = NULL;
 	p->last = NULL;
 	wrl_value_t val = read_top(p);
-	if(val != NULL) {
-		*dst = val;
-	}
+	*dst = val;
 	return p->first;
 }
