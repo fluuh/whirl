@@ -13,6 +13,16 @@
 
 Whirl is a powerful LISP programming language.
 
+```
+(define (makeHello from)
+		(join "Hello from " from "!"))
+(print (makeHello "Whirl"))
+; loop over a list
+(define list [1 2 3])
+(each (i v) list
+	(print (join i ": " v)))
+```
+
 ## How to build
 
 To build with CMake:
@@ -26,7 +36,7 @@ $ cmake --build build
 ```
 $ ./build/wrl help
 Usage:
-    ./build/wrl [options..] <cmd> [args..]
+    ./build/wrl <command> [options..]
 Commands:
     init        initialize an empty project
     build       build project
