@@ -19,4 +19,9 @@ EXPR(SREG, "sreg", "rv")
 /* get a constant */
 EXPR(GET_CONST, "get_const", "c")
 
+/* call a built-in function */
+EXPR(CALL_BUILTIN, "call_builtin", "b")
+/* call a function */
+EXPR(CALL, "call", "f")
+
 EXPR(CALL_NAME, "call_name", "s")
