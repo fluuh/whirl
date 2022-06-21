@@ -76,6 +76,11 @@ typedef struct tir_sym_s {
 	};
 } tir_sym;
 
+typedef struct tir_qual_s {
+	/* NULL-terminated */
+	const char *q[TIR_QUAL_MAX];
+} tir_qual;
+
 /* a module declaration */
 typedef struct tir_decl_s {
 	int cap;
@@ -84,8 +89,15 @@ typedef struct tir_decl_s {
 } tir_decl;
 
 typedef struct tir_module_s {
+	tir_qual qual;
 	tir_decl decl;
 	tir_func *top;
 } tir_module;
+
+typedef struct tir_context_s {
+	int cap;
+	int len;
+	tir_module **m;
+} tcx;
 
 #endif
