@@ -90,7 +90,7 @@ static int parse_args(char **argv)
 		}
 		if(argv[i + 1] != NULL) {
 			fprintf(stderr, ERR_STR "too many arguments\n");
-			fprintf(stderr, HINT_STR "options can only appear before commands\n");
+			return -1;
 		}
 		return 0;
 	}
@@ -187,6 +187,8 @@ int main(int argc, char **argv)
 	args.num_args = 0;
 	args.cmd = CMD_ERR;
 	if(parse_args(&argv[1]) < 0) {
+		args.cmd = CMD_HELP;
+		run_cmd();
 		return 1;
 	}
 	run_cmd();
