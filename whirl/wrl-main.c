@@ -27,7 +27,7 @@ static void print_usage(char *name)
 {
 	fputs("Usage:\n    ", stdout);
 	fputs(name, stdout);
-	fputs(" [options..] <cmd> [args..]\n", stdout);
+	fputs(" <command> [options..]\n", stdout);
 	fputs("Commands:\n"
 	"    init        initialize an empty project\n"
 	"    build       build project\n"
@@ -50,6 +50,10 @@ static int parse_opt(char **argv, int *i)
 	switch(argv[*i][1]) {
 	case('p'):
 		args.pdir = argv[++(*i)];
+		if(args.pdir == NULL) {
+				fprintf(stderr, ERR_STR "option 'p' takes an argument\n");
+				return -1;
+			}
 		return 0;
 	default:
 		fprintf(stderr, ERR_STR "unknown option: '%c'\n", argv[*i][1]);
@@ -82,7 +86,11 @@ static int select_cmd(char *cmd)
 
 static int parse_args(char **argv)
 {
-	for(int i = 0; argv[i] != NULL; i++) {
+	/* get command */
+	if(select_cmd(argv[0]) < 0) {
+		return -1;
+	}
+	for(int i = 1; argv[i] != NULL; i++) {
 		if(argv[i][0] == '-') {
 			/* option */
 			int s = parse_opt(argv, &i);
@@ -91,17 +99,10 @@ static int parse_args(char **argv)
 			}
 			continue;
 		}
-		if(select_cmd(argv[i]) > 0) {
-			return -1;
-		}
-		if(argv[i + 1] != NULL) {
-			fprintf(stderr, ERR_STR "too many arguments\n");
-			return -1;
-		}
-		return 0;
+		fprintf(stderr, ERR_STR "\"%s\" is not an option\n", argv[i]);
+		return -1;
 	}
-	fprintf(stderr, ERR_STR "command not specified\n");
-	return -2;
+	return 0;
 }
 
 /* run cmd */
@@ -192,7 +193,7 @@ int main(int argc, char **argv)
 	args.pdir = ".";
 	args.num_args = 0;
 	args.cmd = CMD_ERR;
-	if(parse_args(&argv[1]) < 0) {
+	if(argc < 2 || parse_args(&argv[1]) < 0) {
 		args.cmd = CMD_HELP;
 		run_cmd();
 		return 1;
