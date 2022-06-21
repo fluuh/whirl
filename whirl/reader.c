@@ -66,7 +66,9 @@ static int is_sym(char c) {
 	   c == '-' || c == '_' ||
 	   c == '?' || c == '+' ||
 	   c == '-' || c == '*' ||
-	   c == '/' || c == '%';
+	   c == '/' || c == '%' ||
+	   c == '.' || /* sugar for (get a b) */
+	   c == ':' /* sugar for (invoke a b ...) */;
 }
 
 static wrl_value_t read_expr(reader_t *p);
