@@ -3,6 +3,8 @@
 
 #define WRL_LIST_DEFAULT 128
 
+#define TIR_MAX_FUNC 256
+
 typedef enum {
 	wrl_void,
 	wrl_nil,

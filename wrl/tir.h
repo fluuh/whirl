@@ -41,12 +41,27 @@ typedef struct tx_expr_s {
 	tx_union u[];
 } tx_expr;
 
+
+typedef struct tx_expr_list_s tx_expr_list;
+struct tx_expr_list_s {
+	tx_expr_list *next;
+	tx_expr *e;
+};
+
+typedef struct tir_func_s tir_func;
+struct tir_func_s {
+	int n_args;
+	tx_expr_list *e;
+	int n_c;
+	tir_func *c[TIR_MAX_FUNC];
+};
+
 typedef struct tir_sym_s {
 	const char *name;
 } tir_sym;
 
 typedef struct tir_unit_decl_s {
-	int num_syms;
+	int num_sym;
 	tir_sym **sym;
 } tir_unit_decl;
 
