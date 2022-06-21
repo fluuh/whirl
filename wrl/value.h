@@ -29,6 +29,8 @@ wrl_value_t wrl_val_sym(const char *s);
 wrl_value_t wrl_val_str(const char *s);
 void wrl_val_free(wrl_value_t val);
 
+void wrl_val_print(wrl_value_t val);
+
 struct wrl_list_s {
 	int cap;
 	int len;
