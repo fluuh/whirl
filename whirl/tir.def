@@ -27,7 +27,9 @@ EXPR(GET_CONST, "get_const", "c")
 
 /* call a built-in function */
 EXPR(CALL_BUILTIN, "call_builtin", "b")
-/* call a function */
+/* call a local function */
 EXPR(CALL, "call", "f")
+/* call an external function */
+EXPR(CALL_QUAL, "call_qual", "q")
 
 EXPR(CALL_NAME, "call_name", "s")

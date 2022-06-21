@@ -39,10 +39,16 @@ extern const char *const tx_name[NUM_TX_CODE];
 extern const char *const tx_type[NUM_TX_CODE];
 extern const unsigned char tx_length[NUM_TX_CODE];
 
+typedef struct tx_qual_s {
+	/* NULL-terminated */
+	const char *q[TIR_QUAL_MAX];
+} tx_qual;
+
 typedef union {
 	tx_str str;
 	tx_reg reg;
 	tx_cst cst;
+	tx_qual *qual;
 } tx_union;
 
 typedef struct tx_expr_s {
@@ -82,11 +88,6 @@ typedef struct tir_sym_s {
 	};
 } tir_sym;
 
-typedef struct tir_qual_s {
-	/* NULL-terminated */
-	const char *q[TIR_QUAL_MAX];
-} tir_qual;
-
 /* a module declaration */
 typedef struct tir_decl_s {
 	int cap;
@@ -95,7 +96,7 @@ typedef struct tir_decl_s {
 } tir_decl;
 
 typedef struct tir_module_s {
-	tir_qual qual;
+	tx_qual qual;
 	tir_decl decl;
 	tir_func *top;
 } tir_module;

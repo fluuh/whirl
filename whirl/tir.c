@@ -22,6 +22,7 @@ const char *const tx_name[NUM_TX_CODE] = {
  * "c" a constant
  * "f" a pointer to a function
  * "b" a builtin function
+ * "q" a name qualifier
  */
 
 #define EXPR(ENUM, NAME, TYPE) TYPE ,
