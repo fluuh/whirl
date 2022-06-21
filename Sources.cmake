@@ -1,9 +1,9 @@
 target_sources(whirl PRIVATE
-  wrl/builtin.c
-  wrl/reader.c
-  wrl/tir.c
-  wrl/value.c
-  wrl/list.c)
+  whirl/builtin.c
+  whirl/reader.c
+  whirl/tir.c
+  whirl/value.c
+  whirl/list.c)
 
 target_sources(whirl.cli PRIVATE
-  wrl/wrl-main.c)
+  whirl/wrl-main.c)

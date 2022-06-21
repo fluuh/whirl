@@ -8,7 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 add_library(whirl)
 
 add_executable(whirl.cli)
-set_target_properties(whirl.cli PROPERTIES OUTPUT_NAME whirl)
+set_target_properties(whirl.cli PROPERTIES OUTPUT_NAME wrl)
 
 include(Sources.cmake)
 
