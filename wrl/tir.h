@@ -12,6 +12,9 @@ typedef const char *tx_str;
 /* register id */
 typedef int tx_reg;
 
+/* constant id */
+typedef int tx_cst;
+
 /* expressions */
 
 #define EXPR(ENUM, NAME, TYPE) TCODE_##ENUM,
@@ -33,6 +36,7 @@ extern const unsigned char tx_length[NUM_TX_CODE];
 typedef union {
 	tx_str str;
 	tx_reg reg;
+	tx_cst cst;
 } tx_union;
 
 typedef struct tx_expr_s {

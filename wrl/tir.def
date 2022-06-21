@@ -16,5 +16,7 @@ EXPR(NOP, "nop", "")
 EXPR(REG, "reg", "r")
 /* set a register */
 EXPR(SREG, "sreg", "rv")
+/* get a constant */
+EXPR(GET_CONST, "get_const", "c")
 
 EXPR(CALL_NAME, "call_name", "s")

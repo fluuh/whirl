@@ -13,6 +13,7 @@ const char *const tx_name[NUM_TX_CODE] = {
 /* the type
  * "s" a pointer to a string
  * "r" a register
+ * "c" a constant
  */
 
 #define EXPR(ENUM, NAME, TYPE) TYPE ,
