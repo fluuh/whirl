@@ -12,6 +12,7 @@
 #define TIR_MAX_FUNC 256
 #define TIR_QUAL_MAX 16
 #define TIR_DECL_MAX 256
+#define TIR_CX_CAP 16
 
 typedef enum {
 	wrl_void,

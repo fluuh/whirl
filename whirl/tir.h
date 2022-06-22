@@ -130,22 +130,27 @@ typedef struct tir_decl_s {
 tir_decl *tir_decl_create(tir_module *mod, size_t cap);
 void tir_decl_free(tir_decl *decl);
 
+typedef struct tir_context_s tcx;
+
 struct tir_module_s {
 	tx_qual *qual;
 	tir_decl decl;
 	tir_func *top;
 };
 
-tir_module *tir_module_create(tx_qual *qual);
+tir_module *tir_module_create(tcx *cx, tx_qual *qual);
 /* only frees top */
 void tir_module_free(tir_module *mod);
 /* frees module */
 void tir_module_destroy(tir_module *mod);
 
-typedef struct tir_context_s {
+struct tir_context_s {
 	int cap;
 	int len;
 	tir_module **m;
-} tcx;
+};
+
+tcx *tcx_create(void);
+void tcx_free(tcx *cx);
 
 #endif
