@@ -1,0 +1,5 @@
+(project modules)
+
+(module modules
+    (type exe)
+    (dir "src"))
