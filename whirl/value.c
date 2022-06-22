@@ -10,7 +10,7 @@
 
 static wrl_value_t val_create(int ty)
 {
-	wrl_value_t val = malloc(sizeof(*val));
+	wrl_value_t val = wmalloc(sizeof(*val));
 	val->ty = ty;
 	val->str = NULL;
 	return val;

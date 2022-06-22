@@ -22,7 +22,7 @@ typedef struct reader_s {
 
 static void report_error(reader_t *p, const char *s)
 {
-	reader_error_t err = malloc(sizeof(*err));
+	reader_error_t err = wmalloc(sizeof(*err));
 	err->col = p->col;
 	err->row = p->row;
 	err->str = s;
@@ -102,7 +102,7 @@ static wrl_value_t read_sym(reader_t *p)
 		len++;
 		nextc(p);
 	}
-	char *str = malloc(len + 1);
+	char *str = wmalloc(len + 1);
 	memcpy(str, &p->src[start], len);
 	str[len] = 0;
 	return wrl_val_sym(str);
@@ -122,7 +122,7 @@ static wrl_value_t read_str(reader_t *p)
 		nextc(p);
 	}
 	nextc(p);
-	char *str = malloc(len + 1);
+	char *str = wmalloc(len + 1);
 	memcpy(str, &p->src[start], len);
 	str[len] = 0;
 	return wrl_val_str(str);
@@ -178,7 +178,7 @@ static wrl_value_t read_top(reader_t *p)
 
 reader_error_t wrl_read(const char *src, wrl_value_t *dst)
 {
-	reader_t *p = malloc(sizeof(*p));
+	reader_t *p = wmalloc(sizeof(*p));
 	p->src = src;
 	p->c = src[0];
 	p->i = 0;

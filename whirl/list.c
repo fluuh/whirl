@@ -13,17 +13,12 @@ static void list_resize(wrl_list_t list, size_t newsize)
 		newsize = WRL_LIST_DEFAULT;
 	}
 	list->cap = newsize;
-	void *new = malloc(sizeof(*list->val) * newsize);
-	if(list->val != NULL) {
-		memcpy(new, list->val, list->len);
-		free(list->val);
-	}
-	list->val = new;
+	list->val = wrealloc(list->val, newsize);
 }
 
 wrl_list_t wrl_list_empty(void)
 {
-	wrl_list_t list = malloc(sizeof(*list));
+	wrl_list_t list = wmalloc(sizeof(*list));
 	list->len = 0;
 	list->val = NULL;
 	list_resize(list, 0);	

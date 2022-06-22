@@ -27,4 +27,8 @@ typedef enum {
 #include <stdlib.h>
 #include <string.h>
 
+#define wmalloc(size) malloc(size)
+#define wrealloc(p, n) realloc(p, n)
+#define wfree(size) free(size)
+
 #endif
