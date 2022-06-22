@@ -36,33 +36,52 @@ typedef enum {
 
 /* defined in tir.c */
 extern const char *const tx_name[NUM_TX_CODE];
+#define GET_TX_NAME(CODE) (tx_name[(int) CODE])
+
 extern const char *const tx_type[NUM_TX_CODE];
+#define GET_TX_TYPE(CODE) (tx_type[(int) CODE])
+
 extern const unsigned char tx_length[NUM_TX_CODE];
+#define GET_TX_LENGTH(CODE) (tx_length[(int) CODE])
+/* get size of code in bytes */
+#define GET_TX_SIZE(CODE) (GET_TX_LENGTH(CODE) * sizeof(tx_union))
 
 typedef struct tx_qual_s {
 	/* NULL-terminated */
 	const char *q[TIR_QUAL_MAX];
 } tx_qual;
 
+typedef struct tx_expr_s tx_expr;
+typedef struct tx_expr_list_s tx_expr_list;
+
 typedef union {
 	tx_str str;
 	tx_reg reg;
 	tx_cst cst;
 	tx_qual *qual;
+	tx_expr *expr;
+	tx_expr_list *xlist;
 } tx_union;
 
-typedef struct tx_expr_s {
+struct tx_expr_s {
 	tx_code code;
 	wrl_type ty;
 	tx_union u[];
-} tx_expr;
+};
 
+/* allocate an expression */
+tx_expr *tx_expr_create(tx_code code);
 
-typedef struct tx_expr_list_s tx_expr_list;
+void tx_expr_free(tx_expr *x);
+
 struct tx_expr_list_s {
 	tx_expr_list *next;
-	tx_expr *e;
+	tx_expr *x;
 };
+
+tx_expr_list *tx_expr_list_create(tx_expr_list *prev, tx_expr *x);
+void tx_expr_list_free(tx_expr_list *list);
+void tx_expr_list_destroy(tx_expr_list *list);
 
 typedef struct tir_func_s tir_func;
 struct tir_func_s {

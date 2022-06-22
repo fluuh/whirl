@@ -44,3 +44,66 @@ const unsigned char tx_length[NUM_TX_CODE] = {
 };
 
 #undef EXPR
+
+/* tx_expr */
+
+tx_expr *tx_expr_create(tx_code code)
+{
+	tx_expr *x = wmalloc(sizeof(*x) + GET_TX_SIZE(code));
+	x->code = code;
+	x->ty = wrl_any;
+	return x;
+}
+
+void tx_expr_destroy(tx_expr *x)
+{
+	for(int i = 0; i < GET_TX_LENGTH(x->code); i++) {
+		/* I'm lucky optimizers exist */
+		switch(GET_TX_TYPE(x->code)[i]) {
+		case('e'):
+			tx_expr_destroy(x->u[i].expr);
+			break;
+		case('E'):
+			tx_expr_list_free(x->u[i].xlist);
+		}
+	}
+	wfree(x);
+}
+
+void tx_expr_free(tx_expr *x)
+{
+	wfree(x);
+}
+
+/* tx_expr_list */
+
+tx_expr_list *tx_expr_list_create(tx_expr_list *prev, tx_expr *x)
+{
+	tx_expr_list *xlist = wmalloc(sizeof(*xlist));
+	xlist->x = x;
+	xlist->next = NULL;
+	if(prev != NULL) {
+		prev->next = xlist;
+	}
+	return xlist;
+}
+
+void tx_expr_list_free(tx_expr_list *list)
+{
+	while(list != NULL) {
+		tx_expr_list *next = list->next;
+		tx_expr_free(list->x);
+		wfree(list);
+		list = next;
+	}
+}
+
+void tx_expr_list_destroy(tx_expr_list *list)
+{
+	while(list != NULL) {
+		tx_expr_list *next = list->next;
+		tx_expr_destroy(list->x);
+		wfree(list);
+		list = next;
+	}
+}
