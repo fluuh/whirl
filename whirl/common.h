@@ -11,6 +11,7 @@
 
 #define TIR_MAX_FUNC 256
 #define TIR_QUAL_MAX 16
+#define TIR_DECL_MAX 256
 
 typedef enum {
 	wrl_void,
@@ -29,6 +30,7 @@ typedef enum {
 
 #define wmalloc(size) malloc(size)
 #define wrealloc(p, n) realloc(p, n)
-#define wfree(size) free(size)
+#define wfree(ptr) free(ptr)
+#define wfree_const(ptr) free((void*) ptr)
 
 #endif
