@@ -107,3 +107,78 @@ void tx_expr_list_destroy(tx_expr_list *list)
 		list = next;
 	}
 }
+
+/* tir_func */
+
+tir_func *tir_func_create(tir_func *parent, int n_args)
+{
+	tir_func *fn = wmalloc(sizeof(*fn));
+	tx_expr *x = tx_expr_create(TCODE_NOP);
+	fn->n_args = n_args;
+	/* initialize so we don't have to check for NULL later */
+	fn->start = tx_expr_list_create(NULL, x);
+	fn->end = fn->start;
+	return fn;
+}
+
+void tir_func_free(tir_func *fn)
+{
+	tx_expr_list_destroy(fn->start);
+	wfree(fn);
+}
+
+void tir_func_destroy(tir_func *fn)
+{
+	tx_expr_list_destroy(fn->start);
+	for(int i = 0; i < fn->n_c; i++) {
+		tir_func_destroy(fn->c[i]);
+	}
+	wfree(fn);
+}
+
+/* tir_decl */
+
+tir_decl *tir_decl_create(tir_module *mod, size_t cap)
+{
+	tir_decl *decl = &mod->decl;
+	if(cap == 0) {
+		cap = TIR_DECL_MAX;
+	}
+	decl->cap = cap;
+	decl->len = 0;
+	decl->sym = wmalloc(sizeof(*decl->sym) * cap);
+	return decl;
+}
+
+void tir_decl_free(tir_decl *decl)
+{
+	for(int i = 0; i < decl->len; i++) {
+		wfree_const(decl->sym[i]->name);
+		wfree(decl->sym[i]);
+	}
+	wfree(decl->sym);
+}
+
+/* tir_module */
+
+tir_module *tir_module_create(tx_qual *qual)
+{
+	tir_module *mod = wmalloc(sizeof(*mod));
+	mod->qual = qual;
+	tir_decl_create(mod, 0);
+	mod->top = NULL;
+	return mod;
+}
+
+void tir_module_free(tir_module *mod)
+{
+	tir_func_destroy(mod->top);
+}
+
+void tir_module_destroy(tir_module *mod)
+{
+	tx_qual_free(mod->qual);
+	tir_decl_free(&mod->decl);
+	tir_func_destroy(mod->top);
+	wfree(mod);
+}

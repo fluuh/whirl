@@ -51,6 +51,10 @@ typedef struct tx_qual_s {
 	const char *q[TIR_QUAL_MAX];
 } tx_qual;
 
+/* takes ownership of the strings */
+tx_qual *tx_qual_create(const char *q[], int n);
+void tx_qual_free(tx_qual *q);
+
 typedef struct tx_expr_s tx_expr;
 typedef struct tx_expr_list_s tx_expr_list;
 
@@ -86,10 +90,17 @@ void tx_expr_list_destroy(tx_expr_list *list);
 typedef struct tir_func_s tir_func;
 struct tir_func_s {
 	int n_args;
-	tx_expr_list *e;
+	tx_expr_list *start;
+	tx_expr_list *end;
 	int n_c;
 	tir_func *c[TIR_MAX_FUNC];
 };
+
+tir_func *tir_func_create(tir_func *parent, int n_args);
+/* free function, but not children */
+void tir_func_free(tir_func *fn);
+/* free function and it's children */
+void tir_func_destroy(tir_func *fn);
 
 typedef struct tir_sym_s {
 	enum {
@@ -107,6 +118,8 @@ typedef struct tir_sym_s {
 	};
 } tir_sym;
 
+typedef struct tir_module_s tir_module;
+
 /* a module declaration */
 typedef struct tir_decl_s {
 	int cap;
@@ -114,11 +127,20 @@ typedef struct tir_decl_s {
 	tir_sym **sym;
 } tir_decl;
 
-typedef struct tir_module_s {
-	tx_qual qual;
+tir_decl *tir_decl_create(tir_module *mod, size_t cap);
+void tir_decl_free(tir_decl *decl);
+
+struct tir_module_s {
+	tx_qual *qual;
 	tir_decl decl;
 	tir_func *top;
-} tir_module;
+};
+
+tir_module *tir_module_create(tx_qual *qual);
+/* only frees top */
+void tir_module_free(tir_module *mod);
+/* frees module */
+void tir_module_destroy(tir_module *mod);
 
 typedef struct tir_context_s {
 	int cap;
