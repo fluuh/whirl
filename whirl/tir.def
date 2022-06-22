@@ -21,9 +21,12 @@ EXPR(NOP, "nop", "")
 /* get the value in a register */
 EXPR(REG, "reg", "r")
 /* set a register */
-EXPR(SREG, "sreg", "rv")
+EXPR(SREG, "sreg", "re")
 /* get a constant */
 EXPR(GET_CONST, "get_const", "c")
+
+/* control flow */
+EXPR(IF, "if", "eee") /* cond, true, false */
 
 /* call a built-in function */
 EXPR(CALL_BUILTIN, "call_builtin", "b")
