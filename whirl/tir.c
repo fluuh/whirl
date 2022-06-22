@@ -173,6 +173,7 @@ tir_module *tir_module_create(tx_qual *qual)
 void tir_module_free(tir_module *mod)
 {
 	tir_func_destroy(mod->top);
+	mod->top = NULL;
 }
 
 void tir_module_destroy(tir_module *mod)
