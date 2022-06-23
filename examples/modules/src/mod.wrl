@@ -1,5 +1,2 @@
-(export
-	makeHello)
-
 (define (makeHello from)
 	(join "Hello from " from "!"))
