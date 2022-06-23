@@ -89,6 +89,7 @@ void tx_expr_list_destroy(tx_expr_list *list);
 
 typedef struct tir_func_s tir_func;
 struct tir_func_s {
+	int n_upval;
 	int n_args;
 	tx_expr_list *start;
 	tx_expr_list *end;
@@ -96,7 +97,7 @@ struct tir_func_s {
 	tir_func *c[TIR_MAX_FUNC];
 };
 
-tir_func *tir_func_create(tir_func *parent, int n_args);
+tir_func *tir_func_create(tir_func *parent, int n_args, int n_upval);
 /* free function, but not children */
 void tir_func_free(tir_func *fn);
 /* free function and it's children */

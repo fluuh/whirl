@@ -25,14 +25,16 @@ EXPR(SREG, "sreg", "re")
 /* get a constant */
 EXPR(GET_CONST, "get_const", "c")
 
+/* create closure */
+EXPR(CLOSURE, "closure", "fE")
+EXPR(GET_UPVAL, "get_upval", "u")
+
 /* control flow */
 EXPR(IF, "if", "eee") /* cond, true, false */
 
 /* call a built-in function */
 EXPR(CALL_BUILTIN, "call_builtin", "b")
 /* call a local function */
-EXPR(CALL, "call", "f")
+EXPR(CALL, "call", "e")
 /* call an external function */
 EXPR(CALL_QUAL, "call_qual", "q")
-
-EXPR(CALL_NAME, "call_name", "s")

@@ -20,11 +20,12 @@ const char *const tx_name[NUM_TX_CODE] = {
  * "s" a pointer to a string
  * "r" a register
  * "c" a constant
- * "f" a pointer to a function
+ * "f" a function identifier
  * "b" a builtin function
  * "q" a name qualifier
  * "e" an expression
  * "E" a list of expressions
+ * "u" an upvalue identifier
  */
 
 #define EXPR(ENUM, NAME, TYPE) TYPE ,
@@ -110,10 +111,11 @@ void tx_expr_list_destroy(tx_expr_list *list)
 
 /* tir_func */
 
-tir_func *tir_func_create(tir_func *parent, int n_args)
+tir_func *tir_func_create(tir_func *parent, int n_args, int n_upval)
 {
 	tir_func *fn = wmalloc(sizeof(*fn));
 	tx_expr *x = tx_expr_create(TCODE_NOP);
+	fn->n_upval = n_upval;
 	fn->n_args = n_args;
 	/* initialize so we don't have to check for NULL later */
 	fn->start = tx_expr_list_create(NULL, x);
