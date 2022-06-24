@@ -1,0 +1,5 @@
+(project units)
+
+(module units
+    (type exe)
+    (dir "src"))
