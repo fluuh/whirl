@@ -47,6 +47,7 @@ extern const unsigned char tx_length[NUM_TX_CODE];
 #define GET_TX_SIZE(CODE) (GET_TX_LENGTH(CODE) * sizeof(tx_union))
 
 typedef struct tx_qual_s {
+	/* used for specifying symbols inside of a unit */
 	const char *n;
 	/* NULL-terminated */
 	const char *q[TIR_QUAL_MAX];

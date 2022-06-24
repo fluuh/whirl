@@ -163,24 +163,60 @@ void tir_decl_free(tir_decl *decl)
 
 /* tir_unit */
 
-static int unit_insert(tcx *cx, tx_qual *qual)
+static int unit_insert(tcx *cx, tir_unit *unit, tx_qual *qual)
 {
-	return -1;
+	tir_tree **t;
+	tir_tree *tree;
+	int len;
+	int pos = 0;
+	/* get the length */
+	for(len = 0; qual->q[len] != NULL; len++);
+	/* find where to insert unit */
+	for(t = &cx->tree; *t != NULL && pos < len; ) {
+		if(strcmp((*t)->name, qual->q[pos]) == 0) {
+			if(pos == len - 1) {
+				/* unit name already exists */
+				tree = *t;
+				goto insert;
+			}
+			t = &(*t)->child;
+			pos++;
+		} else {
+			t = &(*t)->next;
+		}
+	}
+	/* create new nodes */
+	tree = malloc(sizeof(*tree));
+	tree->name = qual->q[pos];
+	tree->next = NULL;
+	tree->child = NULL;
+	(*t)->next = tree;
+	for(;pos < len; pos++) {
+		t = &tree->child;
+		tree = malloc(sizeof(*tree));
+		tree->next = NULL;
+		tree->child = NULL;
+		tree->name = qual->q[pos];
+		*t = tree;
+	}
+insert:
+	tree->m = unit;
+	return 0;
 }
 
 tir_unit *tir_unit_create(tcx *cx, tx_qual *qual)
 {
-	tir_unit *mod = wmalloc(sizeof(*mod));
-	tir_decl_create(mod, 0);
-	mod->top = NULL;
+	tir_unit *unit = wmalloc(sizeof(*unit));
+	tir_decl_create(unit, 0);
+	unit->top = NULL;
 	/* add unit to context */
 	if(cx->len >= cx->cap) {
 		cx->cap *= 2;
 		cx->m = wrealloc(cx->m, cx->cap);
 	}
-	cx->m[cx->len++] = mod;
-	unit_insert(cx, qual);
-	return mod;
+	cx->m[cx->len++] = unit;
+	unit_insert(cx, unit, qual);
+	return unit;
 }
 
 void tir_unit_free(tir_unit *mod)
