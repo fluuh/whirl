@@ -19,6 +19,7 @@ const char *const tx_name[NUM_TX_CODE] = {
 /* the type
  * "s" a pointer to a string
  * "r" a register
+ * "R" is a list of registers
  * "c" a constant
  * "f" a function identifier
  * "b" a builtin function
