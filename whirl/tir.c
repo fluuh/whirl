@@ -163,10 +163,14 @@ void tir_decl_free(tir_decl *decl)
 
 /* tir_module */
 
+static int module_insert(tcx *cx, tx_qual *qual)
+{
+	return -1;
+}
+
 tir_module *tir_module_create(tcx *cx, tx_qual *qual)
 {
 	tir_module *mod = wmalloc(sizeof(*mod));
-	mod->qual = qual;
 	tir_decl_create(mod, 0);
 	mod->top = NULL;
 	/* add module to context */
@@ -175,6 +179,7 @@ tir_module *tir_module_create(tcx *cx, tx_qual *qual)
 		cx->m = wrealloc(cx->m, cx->cap);
 	}
 	cx->m[cx->len++] = mod;
+	module_insert(cx, qual);
 	return mod;
 }
 
@@ -186,7 +191,6 @@ void tir_module_free(tir_module *mod)
 
 void tir_module_destroy(tir_module *mod)
 {
-	tx_qual_free(mod->qual);
 	tir_decl_free(&mod->decl);
 	tir_func_destroy(mod->top);
 	wfree(mod);

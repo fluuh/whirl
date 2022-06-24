@@ -47,12 +47,13 @@ extern const unsigned char tx_length[NUM_TX_CODE];
 #define GET_TX_SIZE(CODE) (GET_TX_LENGTH(CODE) * sizeof(tx_union))
 
 typedef struct tx_qual_s {
+	const char *n;
 	/* NULL-terminated */
 	const char *q[TIR_QUAL_MAX];
 } tx_qual;
 
 /* takes ownership of the strings */
-tx_qual *tx_qual_create(const char *q[], int n);
+tx_qual *tx_qual_create(const char *n, const char *q[], int len);
 void tx_qual_free(tx_qual *q);
 
 typedef struct tx_expr_s tx_expr;
@@ -134,7 +135,6 @@ void tir_decl_free(tir_decl *decl);
 typedef struct tir_context_s tcx;
 
 struct tir_module_s {
-	tx_qual *qual;
 	tir_decl decl;
 	tir_func *top;
 };
@@ -145,7 +145,16 @@ void tir_module_free(tir_module *mod);
 /* frees module */
 void tir_module_destroy(tir_module *mod);
 
+typedef struct tir_tree_s tir_tree;
+struct tir_tree_s {
+	tir_tree *next;
+	tir_tree *child;
+	const char *name;
+	tir_module *m; /* can be null */
+};
+
 struct tir_context_s {
+	tir_tree *tree;
 	int cap;
 	int len;
 	tir_module **m;
