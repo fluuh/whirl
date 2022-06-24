@@ -120,44 +120,44 @@ typedef struct tir_sym_s {
 	};
 } tir_sym;
 
-typedef struct tir_module_s tir_module;
+typedef struct tir_unit_s tir_unit;
 
-/* a module declaration */
+/* a unit declaration */
 typedef struct tir_decl_s {
 	int cap;
 	int len;
 	tir_sym **sym;
 } tir_decl;
 
-tir_decl *tir_decl_create(tir_module *mod, size_t cap);
+tir_decl *tir_decl_create(tir_unit *mod, size_t cap);
 void tir_decl_free(tir_decl *decl);
 
 typedef struct tir_context_s tcx;
 
-struct tir_module_s {
+struct tir_unit_s {
 	tir_decl decl;
 	tir_func *top;
 };
 
-tir_module *tir_module_create(tcx *cx, tx_qual *qual);
+tir_unit *tir_unit_create(tcx *cx, tx_qual *qual);
 /* only frees top */
-void tir_module_free(tir_module *mod);
-/* frees module */
-void tir_module_destroy(tir_module *mod);
+void tir_unit_free(tir_unit *mod);
+/* frees unit */
+void tir_unit_destroy(tir_unit *mod);
 
 typedef struct tir_tree_s tir_tree;
 struct tir_tree_s {
 	tir_tree *next;
 	tir_tree *child;
 	const char *name;
-	tir_module *m; /* can be null */
+	tir_unit *m; /* can be null */
 };
 
 struct tir_context_s {
 	tir_tree *tree;
 	int cap;
 	int len;
-	tir_module **m;
+	tir_unit **m;
 };
 
 tcx *tcx_create(void);

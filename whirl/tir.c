@@ -140,7 +140,7 @@ void tir_func_destroy(tir_func *fn)
 
 /* tir_decl */
 
-tir_decl *tir_decl_create(tir_module *mod, size_t cap)
+tir_decl *tir_decl_create(tir_unit *mod, size_t cap)
 {
 	tir_decl *decl = &mod->decl;
 	if(cap == 0) {
@@ -161,35 +161,35 @@ void tir_decl_free(tir_decl *decl)
 	wfree(decl->sym);
 }
 
-/* tir_module */
+/* tir_unit */
 
-static int module_insert(tcx *cx, tx_qual *qual)
+static int unit_insert(tcx *cx, tx_qual *qual)
 {
 	return -1;
 }
 
-tir_module *tir_module_create(tcx *cx, tx_qual *qual)
+tir_unit *tir_unit_create(tcx *cx, tx_qual *qual)
 {
-	tir_module *mod = wmalloc(sizeof(*mod));
+	tir_unit *mod = wmalloc(sizeof(*mod));
 	tir_decl_create(mod, 0);
 	mod->top = NULL;
-	/* add module to context */
+	/* add unit to context */
 	if(cx->len >= cx->cap) {
 		cx->cap *= 2;
 		cx->m = wrealloc(cx->m, cx->cap);
 	}
 	cx->m[cx->len++] = mod;
-	module_insert(cx, qual);
+	unit_insert(cx, qual);
 	return mod;
 }
 
-void tir_module_free(tir_module *mod)
+void tir_unit_free(tir_unit *mod)
 {
 	tir_func_destroy(mod->top);
 	mod->top = NULL;
 }
 
-void tir_module_destroy(tir_module *mod)
+void tir_unit_destroy(tir_unit *mod)
 {
 	tir_decl_free(&mod->decl);
 	tir_func_destroy(mod->top);
@@ -210,7 +210,7 @@ tcx *tcx_create(void)
 void tcx_free(tcx *cx)
 {
 	for(int i = 0; i < cx->len; i++) {
-		tir_module_destroy(cx->m[i]);
+		tir_unit_destroy(cx->m[i]);
 	}
 	wfree(cx->m);
 	wfree(cx);
