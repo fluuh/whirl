@@ -110,9 +110,6 @@ typedef struct tir_sym_s {
 		resolve_use,
 		resolve_raw,
 	} resolve;
-	enum {
-		sym_func,
-	} ty;
 	const char *name;
 	union {
 		struct {
