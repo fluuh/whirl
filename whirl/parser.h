@@ -10,6 +10,10 @@
 #include "tir.h"
 #include "value.h"
 
+typedef struct wrl_parser_s {
+	int 
+} wrl_parser;
+
 tir_module *wrl_parse(const char *src);
 tir_module *wrl_parse_list(wrl_value_t list);
 

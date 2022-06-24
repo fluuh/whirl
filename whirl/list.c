@@ -7,7 +7,7 @@
 #include "common.h"
 #include "value.h"
 
-static void list_resize(wrl_list_t list, size_t newsize)
+static void list_resize(wrl_list *list, size_t newsize)
 {
 	if(newsize == 0) {
 		newsize = WRL_LIST_DEFAULT;
@@ -16,16 +16,16 @@ static void list_resize(wrl_list_t list, size_t newsize)
 	list->val = wrealloc(list->val, newsize);
 }
 
-wrl_list_t wrl_list_empty(void)
+wrl_list *wrl_list_empty(void)
 {
-	wrl_list_t list = wmalloc(sizeof(*list));
+	wrl_list *list = wmalloc(sizeof(*list));
 	list->len = 0;
 	list->val = NULL;
 	list_resize(list, 0);	
 	return list;
 }
 
-void wrl_list_free(wrl_list_t list)
+void wrl_list_free(wrl_list *list)
 {
 	for(int i = 0; i < list->len; i++) {
 		wrl_val_free(list->val[i]);
@@ -34,7 +34,7 @@ void wrl_list_free(wrl_list_t list)
 	free(list);
 }
 
-int wrl_list_append(wrl_list_t list, wrl_value_t val)
+int wrl_list_append(wrl_list *list, wrl_value *val)
 {
 	if(list->len >= list->cap) {
 		list_resize(list, list->cap * 2);
@@ -43,7 +43,7 @@ int wrl_list_append(wrl_list_t list, wrl_value_t val)
 	return list->len - 1;
 }
 
-wrl_value_t wrl_list_get(wrl_list_t list, int i)
+wrl_value *wrl_list_get(wrl_list *list, int i)
 {
 	if(i >= list->len) {
 		return NULL;
@@ -51,7 +51,7 @@ wrl_value_t wrl_list_get(wrl_list_t list, int i)
 	return list->val[i];
 }
 
-int wrl_list_set(wrl_list_t list, int i, wrl_value_t val)
+int wrl_list_set(wrl_list *list, int i, wrl_value *val)
 {
 	if(i >= list->len) {
 		return -1;

@@ -8,55 +8,55 @@
 #include "common.h"
 #include "value.h"
 
-static wrl_value_t val_create(int ty)
+static wrl_value *val_create(int ty)
 {
-	wrl_value_t val = wmalloc(sizeof(*val));
+	wrl_value *val = wmalloc(sizeof(*val));
 	val->ty = ty;
 	val->str = NULL;
 	return val;
 }
 
-wrl_value_t wrl_val_nop(void)
+wrl_value *wrl_val_nop(void)
 {
 	return val_create(val_nop);
 }
 
-wrl_value_t wrl_val_list(wrl_list_t list)
+wrl_value *wrl_val_list(wrl_list *list)
 {
-	wrl_value_t val = val_create(val_list);
+	wrl_value *val = val_create(val_list);
 	val->list = list;
 	return val;
 }
 
-wrl_value_t wrl_val_quote(wrl_list_t list)
+wrl_value *wrl_val_quote(wrl_list *list)
 {
-	wrl_value_t val = val_create(val_quote);
+	wrl_value *val = val_create(val_quote);
 	val->list = list;
 	return val;
 }
 
-wrl_value_t wrl_val_num(double num)
+wrl_value *wrl_val_num(double num)
 {
-	wrl_value_t val = val_create(val_num);
+	wrl_value *val = val_create(val_num);
 	val->num = num;
 	return val;
 }
 
-wrl_value_t wrl_val_sym(const char *s)
+wrl_value *wrl_val_sym(const char *s)
 {
-	wrl_value_t val = val_create(val_symbol);
+	wrl_value *val = val_create(val_symbol);
 	val->str = s;
 	return val;
 }
 
-wrl_value_t wrl_val_str(const char *s)
+wrl_value *wrl_val_str(const char *s)
 {
-	wrl_value_t val = val_create(val_str);
+	wrl_value *val = val_create(val_str);
 	val->str = s;
 	return val;
 }
 
-void wrl_val_free(wrl_value_t val)
+void wrl_val_free(wrl_value *val)
 {
 	switch(val->ty) {
 	case(val_list):
@@ -71,7 +71,7 @@ void wrl_val_free(wrl_value_t val)
 	free(val);
 }
 
-static void print_list(wrl_list_t list, const char *surround)
+static void print_list(wrl_list *list, const char *surround)
 {
 	fputc(surround[0], stdout);
 	for(int i = 0; i < list->len; i++) {
@@ -80,7 +80,7 @@ static void print_list(wrl_list_t list, const char *surround)
 	fputc(surround[1], stdout);
 }
 
-void wrl_val_print(wrl_value_t val)
+void wrl_val_print(wrl_value *val)
 {
 	switch(val->ty) {
 	case(val_nop):

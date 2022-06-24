@@ -15,14 +15,14 @@
 #define TIR_CX_CAP 16
 
 typedef enum {
-	wrl_void,
-	wrl_any,
-	wrl_nil,
-	wrl_list,
-	wrl_func,
-	wrl_table, /* TODO */
-	wrl_number,
-	wrl_string,
+	wt_void,
+	wt_any,
+	wt_nil,
+	wt_list,
+	wt_func,
+	wt_table, /* TODO */
+	wt_number,
+	wt_string,
 } wrl_type;
 
 /* used by most files */

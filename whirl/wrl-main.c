@@ -126,7 +126,7 @@ static char *read_file(const char *dir, const char *name)
 	return str;
 }
 
-static void print_reader_error(const char *src, const char *file, reader_error_t err)
+static void print_reader_error(const char *src, const char *file, reader_error *err)
 {
 	printf(ERR_STR "in file \x1b[1m%s\x1b[0m(%i:%i): %s\n", file, err->row, err->col, err->str);
 	int row = 1;
@@ -154,8 +154,8 @@ static int cmd_build(void)
 	if(src == NULL) {
 		return -1;
 	}
-	wrl_value_t val;
-	reader_error_t err = wrl_read(src, &val);
+	wrl_value *val;
+	reader_error *err = wrl_read(src, &val);
 	if(err != NULL) {
 		while(err != NULL) {
 			print_reader_error(src, "project.wrl", err);

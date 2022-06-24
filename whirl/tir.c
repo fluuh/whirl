@@ -53,7 +53,7 @@ tx_expr *tx_expr_create(tx_code code)
 {
 	tx_expr *x = wmalloc(sizeof(*x) + GET_TX_SIZE(code));
 	x->code = code;
-	x->ty = wrl_any;
+	x->ty = wt_any;
 	return x;
 }
 

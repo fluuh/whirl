@@ -16,13 +16,13 @@ typedef struct reader_s {
 	int col;
 	int row;
 	int num_errors;
-	reader_error_t first;
-	reader_error_t last;
+	reader_error *first;
+	reader_error *last;
 } reader_t;
 
 static void report_error(reader_t *p, const char *s)
 {
-	reader_error_t err = wmalloc(sizeof(*err));
+	reader_error *err = wmalloc(sizeof(*err));
 	err->col = p->col;
 	err->row = p->row;
 	err->str = s;
@@ -71,12 +71,12 @@ static int is_sym(char c) {
 	   c == ':' /* sugar for (invoke a b ...) */;
 }
 
-static wrl_value_t read_expr(reader_t *p);
+static wrl_value *read_expr(reader_t *p);
 
-static wrl_value_t read_list(reader_t *p)
+static wrl_value *read_list(reader_t *p)
 {
 	nextc(p);
-	wrl_list_t list = wrl_list_empty();
+	wrl_list *list = wrl_list_empty();
 	while(p->c != ')') {
 		if(p->c == 0) {
 			wrl_list_free(list);
@@ -89,12 +89,12 @@ static wrl_value_t read_list(reader_t *p)
 }
 
 
-static wrl_value_t read_num(reader_t *p)
+static wrl_value *read_num(reader_t *p)
 {
 	
 }
 
-static wrl_value_t read_sym(reader_t *p)
+static wrl_value *read_sym(reader_t *p)
 {
 	int start = p->i - 1;
 	int len = 0;
@@ -108,7 +108,7 @@ static wrl_value_t read_sym(reader_t *p)
 	return wrl_val_sym(str);
 }
 
-static wrl_value_t read_str(reader_t *p)
+static wrl_value *read_str(reader_t *p)
 {
 	nextc(p);
 	int start = p->i - 1;
@@ -128,7 +128,7 @@ static wrl_value_t read_str(reader_t *p)
 	return wrl_val_str(str);
 }
 
-static wrl_value_t read_expr(reader_t *p)
+static wrl_value *read_expr(reader_t *p)
 {
 	while(is_whitespace(p->c)) {
 		nextc(p);
@@ -158,12 +158,12 @@ static wrl_value_t read_expr(reader_t *p)
 	return wrl_val_nop();
 }
 
-static wrl_value_t read_top(reader_t *p)
+static wrl_value *read_top(reader_t *p)
 {
 	nextc(p);
-	wrl_list_t list = wrl_list_empty();
+	wrl_list *list = wrl_list_empty();
 	while(p->c != 0) {
-		wrl_value_t val = read_expr(p);
+		wrl_value *val = read_expr(p);
 		if(val == NULL) {
 			/* fatal error */
 			return NULL;
@@ -176,7 +176,7 @@ static wrl_value_t read_top(reader_t *p)
 	return wrl_val_list(list);
 }
 
-reader_error_t wrl_read(const char *src, wrl_value_t *dst)
+reader_error *wrl_read(const char *src, wrl_value **dst)
 {
 	reader_t *p = wmalloc(sizeof(*p));
 	p->src = src;
@@ -186,7 +186,7 @@ reader_error_t wrl_read(const char *src, wrl_value_t *dst)
 	p->row = 1;
 	p->first = NULL;
 	p->last = NULL;
-	wrl_value_t val = read_top(p);
+	wrl_value *val = read_top(p);
 	*dst = val;
 	return p->first;
 }
