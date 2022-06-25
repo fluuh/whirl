@@ -13,6 +13,7 @@ struct wrl_module_s {
 	wrl_module *next;
 	int num_src;
 	const char **src;
+	const char *out; /* output directory relative to default */
 	/* the next unit to load */
 	int load;
 };

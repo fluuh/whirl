@@ -65,6 +65,7 @@ static int load_package(struct package *pkg, wrl_list *list)
 			return -1;
 		}
 	}
+	return 0;
 }
 
 int wrl_load_package(wrl_build *build, const char *src)
@@ -74,4 +75,10 @@ int wrl_load_package(wrl_build *build, const char *src)
 		return -1;
 	}
 	struct package *pkg = wmalloc(sizeof(*pkg));
+	/* wrl_read always returns a list, so this is safe */
+	if(load_package(pkg, list->list) < 0) {
+		return -1;
+	}
+
+	
 }
