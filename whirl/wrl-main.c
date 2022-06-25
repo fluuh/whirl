@@ -5,9 +5,13 @@
  */
 
 #include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
 #include "common.h"
 #include "whirl.h"
 #include "reader.h"
+#include "build.h"
+#include "util.h"
 
 #define ERR_STR "\x1b[0;1;31merror:\x1b[0m "
 #define HINT_STR "\x1b[0;1;36mhint:\x1b[0m "
@@ -106,25 +110,6 @@ static int parse_args(char **argv)
 }
 
 /* run cmd */
-static char *read_file(const char *dir, const char *name)
-{
-	if(strlen(dir) + strlen(name) > 256) {
-		return NULL;
-	}
-	char path[256];
-	sprintf(path, "%s/%s", dir, name);
-	FILE *f = fopen(path, "r");
-	if(f == NULL) {
-		return NULL;
-	}
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	rewind(f);
-	char *str = malloc(fsize + 1);
-	fread(str, fsize, 1, f);
-	str[fsize] = 0;
-	return str;
-}
 
 static void print_reader_error(const char *src, const char *file, reader_error *err)
 {
@@ -162,7 +147,8 @@ static int cmd_build(void)
 			err = err->next;
 		}
 	}
-	wrl_val_print(val);
+	wrl_build *build = wrl_build_create(args.pdir);
+	wrl_build_build(build);
 	return 0;
 }
 
@@ -197,6 +183,13 @@ int main(int argc, char **argv)
 		args.cmd = CMD_HELP;
 		run_cmd();
 		return 1;
+	}
+
+	/* change to the project directory */
+	if(chdir(args.pdir) == -1) {
+		printf(ERR_STR "could not change to directory '%s': %s\n", 
+			args.pdir,
+			strerror(errno));
 	}
 	run_cmd();
 	return 0;

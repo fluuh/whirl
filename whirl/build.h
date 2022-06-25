@@ -24,6 +24,7 @@ typedef struct wrl_build_s {
 } wrl_build;
 
 wrl_build *wrl_build_create(const char *out_dir);
+int wrl_build_build(wrl_build *build);
 /* load and parse a package and it's dependencies */
 int wrl_load_package(wrl_build *build, const char *src);
 

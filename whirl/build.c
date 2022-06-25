@@ -82,3 +82,8 @@ int wrl_load_package(wrl_build *build, const char *src)
 
 	
 }
+
+int wrl_build_build(wrl_build *build)
+{
+	return 0;
+}

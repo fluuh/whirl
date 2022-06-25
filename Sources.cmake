@@ -4,7 +4,8 @@ target_sources(whirl PRIVATE
   whirl/reader.c
   whirl/tir.c
   whirl/value.c
-  whirl/list.c)
+  whirl/list.c
+  whirl/util.c)
 
 target_sources(whirl.cli PRIVATE
   whirl/wrl-main.c)
