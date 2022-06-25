@@ -1,4 +1,5 @@
 target_sources(whirl PRIVATE
+  whirl/build.c
   whirl/builtin.c
   whirl/reader.c
   whirl/tir.c
